@@ -4,7 +4,7 @@ namespace checkout_kata.Services;
 
 public interface ICheckoutService
 {
-    int Total();
+    decimal Total();
     void Add(IProduct product);
     IEnumerable<IProduct> Basket { get; }
 }

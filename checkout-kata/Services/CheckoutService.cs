@@ -12,9 +12,14 @@ public class CheckoutService : ICheckoutService
         _discountService = discountService ?? throw new ArgumentNullException(nameof(discountService));
     }
 
-    public int Total()
+    public decimal Total()
     {
-        throw new NotImplementedException();
+        decimal total = 0;
+        foreach (var item in _basket)
+        {
+            total = item.UnitPrice + total;
+        }
+        return total;
     }
 
     public void Add(IProduct product)
