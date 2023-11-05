@@ -5,4 +5,6 @@ public interface IDiscount
     char ItemSku { get; set; }
     int Quantity { get; set; }
     decimal Value { get; set; }
+    decimal Calculate(IEnumerable<IProduct> products);
+    
 }

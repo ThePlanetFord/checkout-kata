@@ -61,7 +61,7 @@ public class CheckoutServiceTests
 
     [Theory]
     [MemberData(nameof(GetCheckoutData))]
-    public void GivenDiscountsExistInBasket_ThenApplyDiscountToTotal(IEnumerable<Product> products, IEnumerable<Discount> discounts, decimal expectedPrice)
+    public void GivenDiscountsExistInBasket_ThenApplyDiscountToTotal(IEnumerable<Product> products, IEnumerable<IDiscount> discounts, decimal expectedPrice)
     {
         DiscountService.Setup(x => x.GetDiscounts())
             .Returns(discounts);
@@ -81,30 +81,14 @@ public class CheckoutServiceTests
         {
             new List<Product>
             {
-                new()
-                {
-                    Sku = 'A',
-                    UnitPrice = 10
-                },
-                new()
-                {
-                    Sku = 'B',
-                    UnitPrice = 15
-                },
-                new()
-                {
-                    Sku = 'B',
-                    UnitPrice = 15
-                },
-                new()
-                {
-                    Sku = 'B',
-                    UnitPrice = 15
-                }
+                new() { Sku = 'A', UnitPrice = 10 },
+                new() { Sku = 'B', UnitPrice = 15 },
+                new() { Sku = 'B', UnitPrice = 15 }, 
+                new() { Sku = 'B', UnitPrice = 15 }
             },
-            new List<Discount>
+            new List<IDiscount>
             {
-                new()
+                new CashDiscount()
                 {
                     ItemSku = 'B',
                     Quantity = 3,
@@ -112,6 +96,31 @@ public class CheckoutServiceTests
                 }
             },
             50
+        };
+        
+        yield return new object[]
+        {
+            new List<Product>
+            {
+                new() { Sku = 'A', UnitPrice = 10 },
+                new() { Sku = 'B', UnitPrice = 15 },
+                new() { Sku = 'B', UnitPrice = 15 }, 
+                new() { Sku = 'B', UnitPrice = 15 },
+                new() { Sku = 'B', UnitPrice = 15 },
+                new() { Sku = 'B', UnitPrice = 15 }, 
+                new() { Sku = 'B', UnitPrice = 15 },
+                new() { Sku = 'C', UnitPrice = 40}
+            },
+            new List<IDiscount>
+            {
+                new CashDiscount()
+                {
+                    ItemSku = 'B',
+                    Quantity = 3,
+                    Value = 40
+                }
+            },
+            130
         };
     }
 }

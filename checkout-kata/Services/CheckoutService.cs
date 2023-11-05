@@ -14,9 +14,11 @@ public class CheckoutService : ICheckoutService
 
     public decimal Total()
     {
-        decimal total = 0;
-        total = _basket.Sum(x => x.UnitPrice);
-        return total;
+        var discounts = _discountService.GetDiscounts();
+        var discount = discounts.Sum(x => CalculateDiscount(x, _basket));
+        var total = _basket.Sum(x => x.UnitPrice);
+
+        return total - discount;
     }
 
     public void Add(IProduct product)
@@ -25,6 +27,12 @@ public class CheckoutService : ICheckoutService
             throw new ArgumentNullException(nameof(product));
         
         _basket.Add(product);
+    }
+    
+    private static decimal CalculateDiscount(IDiscount discount, IEnumerable<IProduct> cart)
+    {
+        var applicableProducts = cart.Where(product => product.Sku == discount.ItemSku);
+        return discount.Calculate(applicableProducts);
     }
 
     public IEnumerable<IProduct> Basket => _basket;
