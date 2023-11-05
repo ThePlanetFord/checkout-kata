@@ -7,6 +7,9 @@ public class PercentDiscount : IDiscount
     public decimal Value { get; set; }
     public decimal Calculate(IEnumerable<IProduct> products)
     {
+        if (products is null)
+            throw new ArgumentNullException(nameof(products));
+        
         throw new NotImplementedException();
     }
 }
