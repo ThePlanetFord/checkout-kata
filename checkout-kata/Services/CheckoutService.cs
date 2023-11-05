@@ -7,6 +7,7 @@ public class CheckoutService : ICheckoutService
     private readonly IDiscountService _discountService;
     private readonly IList<IProduct> _basket = new List<IProduct>();
     
+    //In a production app I would have used dependency injection to inject the discountService interface
     public CheckoutService(IDiscountService discountService)
     {
         _discountService = discountService ?? throw new ArgumentNullException(nameof(discountService));

@@ -9,14 +9,14 @@ public class CheckoutServiceTests
 {
     private Mock<IDiscountService> DiscountService;
     private CheckoutService CheckoutService;
-    
+
     public CheckoutServiceTests()
     {
         DiscountService = new Mock<IDiscountService>();
         CheckoutService = new CheckoutService(DiscountService.Object);
     }
-    
-    
+
+
     [Fact]
     public void GivenANullDiscountService_WhenConstructingCheckout_ThenThrowArgumentNullException()
     {
@@ -60,8 +60,9 @@ public class CheckoutServiceTests
     }
 
     [Theory]
-    [MemberData(nameof(GetCheckoutData))]
-    public void GivenDiscountsExistInBasket_ThenApplyDiscountToTotal(IEnumerable<Product> products, IEnumerable<IDiscount> discounts, decimal expectedPrice)
+    [MemberData(nameof(GetScenarioThreeCheckOutData))]
+    public void GivenDiscountsExistInBasket_ThenApplyDiscountToTotal(IEnumerable<Product> products,
+        IEnumerable<IDiscount> discounts, decimal expectedPrice)
     {
         DiscountService.Setup(x => x.GetDiscounts())
             .Returns(discounts);
@@ -74,8 +75,46 @@ public class CheckoutServiceTests
         CheckoutService.Total().Should().Be(expectedPrice);
     }
 
+    [Fact]
+    public void GivenThereIsNoDiscountsAvailable_WhenCalculatingCheckout_ThenReturnExpected()
+    {
+        DiscountService.Setup(x => x.GetDiscounts())
+            .Returns(Enumerable.Empty<IDiscount>());
 
-    public static IEnumerable<object[]> GetCheckoutData()
+        var products = new List<IProduct>
+        {
+            new Product() { Sku = 'A', UnitPrice = 10 },
+            new Product() { Sku = 'B', UnitPrice = 15 },
+            new Product() { Sku = 'C', UnitPrice = 40 },
+            new Product() { Sku = 'D', UnitPrice = 55 }
+        };
+
+        foreach (var product in products)
+        {
+            CheckoutService.Add(product);
+        }
+
+        CheckoutService.Basket.Should().BeEquivalentTo(products);
+        CheckoutService.Total().Should().Be(120);
+    }
+
+    [Theory]
+    [MemberData(nameof(MultipleDiscountsPresent))]
+    public void GivenMultipleDiscountsArePresent_ThenCalculateExpectedBasketTotal(IEnumerable<IDiscount> discounts,
+        IEnumerable<Product> products, decimal expectedPrice)
+    {
+        DiscountService.Setup(x => x.GetDiscounts())
+            .Returns(discounts);
+        foreach (var product in products)
+        {
+            CheckoutService.Add(product);
+        }
+
+        CheckoutService.Basket.Should().BeEquivalentTo(products);
+        CheckoutService.Total().Should().Be(expectedPrice);
+    }
+
+    public static IEnumerable<object[]> GetScenarioThreeCheckOutData()
     {
         yield return new object[]
         {
@@ -83,7 +122,7 @@ public class CheckoutServiceTests
             {
                 new() { Sku = 'A', UnitPrice = 10 },
                 new() { Sku = 'B', UnitPrice = 15 },
-                new() { Sku = 'B', UnitPrice = 15 }, 
+                new() { Sku = 'B', UnitPrice = 15 },
                 new() { Sku = 'B', UnitPrice = 15 }
             },
             new List<IDiscount>
@@ -97,15 +136,15 @@ public class CheckoutServiceTests
             },
             50
         };
-        
+
         yield return new object[]
         {
             new List<Product>
             {
                 new() { Sku = 'A', UnitPrice = 10 },
                 new() { Sku = 'B', UnitPrice = 15 },
-                new() { Sku = 'B', UnitPrice = 15 }, 
-                new() { Sku = 'C', UnitPrice = 40}
+                new() { Sku = 'B', UnitPrice = 15 },
+                new() { Sku = 'C', UnitPrice = 40 }
             },
             new List<IDiscount>
             {
@@ -118,17 +157,17 @@ public class CheckoutServiceTests
             },
             80
         };
-        
+
         yield return new object[]
         {
             new List<Product>
             {
                 new() { Sku = 'A', UnitPrice = 10 },
                 new() { Sku = 'B', UnitPrice = 15 },
-                new() { Sku = 'B', UnitPrice = 15 }, 
-                new() { Sku = 'B', UnitPrice = 15 }, 
-                new() { Sku = 'B', UnitPrice = 15 }, 
-                new() { Sku = 'C', UnitPrice = 40}
+                new() { Sku = 'B', UnitPrice = 15 },
+                new() { Sku = 'B', UnitPrice = 15 },
+                new() { Sku = 'B', UnitPrice = 15 },
+                new() { Sku = 'C', UnitPrice = 40 }
             },
             new List<IDiscount>
             {
@@ -140,6 +179,41 @@ public class CheckoutServiceTests
                 }
             },
             105
+        };
+    }
+
+    public static IEnumerable<object[]> MultipleDiscountsPresent()
+    {
+        yield return new object[]
+        {
+            new List<IDiscount>()
+            {
+                new CashDiscount()
+                {
+                    ItemSku = 'B',
+                    Quantity = 3,
+                    Value = 40
+                },
+                new PercentDiscount()
+                {
+                    ItemSku = 'D',
+                    Quantity = 2,
+                    Value = 0.25M
+                }
+            },
+            new List<Product>
+            {
+                new() { Sku = 'A', UnitPrice = 10 },
+                new() { Sku = 'B', UnitPrice = 15 },
+                new() { Sku = 'B', UnitPrice = 15 },
+                new() { Sku = 'B', UnitPrice = 15 },
+                new() { Sku = 'B', UnitPrice = 15 },
+                new() { Sku = 'C', UnitPrice = 40 },
+                new() { Sku = 'D', UnitPrice = 55 },
+                new() { Sku = 'D', UnitPrice = 55 },
+                new() { Sku = 'D', UnitPrice = 55 }
+            },
+            151.25M
         };
     }
 }

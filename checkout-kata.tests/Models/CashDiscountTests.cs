@@ -15,7 +15,7 @@ public class CashDiscountTests
     }
 
     [Theory]
-    [MemberData(nameof(CalculationTests))]
+    [MemberData(nameof(CashDiscountScenarios))]
     public void GivenASetOfProductsWhenCalculatingDiscount_ReturnExpectedDiscount(IEnumerable<IProduct> products,
         decimal expectedDiscount)
     {
@@ -29,7 +29,7 @@ public class CashDiscountTests
         cashDiscount.Calculate(products).Should().Be(expectedDiscount);
     }
     
-    public static IEnumerable<object[]> CalculationTests()
+    public static IEnumerable<object[]> CashDiscountScenarios()
     {
         yield return new object[]
         {
