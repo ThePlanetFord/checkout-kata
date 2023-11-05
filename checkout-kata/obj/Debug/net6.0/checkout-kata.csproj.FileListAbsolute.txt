@@ -1,0 +1,12 @@
+/Users/benford/GIT/checkout-kata/checkout-kata/bin/Debug/net6.0/checkout-kata.deps.json
+/Users/benford/GIT/checkout-kata/checkout-kata/bin/Debug/net6.0/checkout-kata.dll
+/Users/benford/GIT/checkout-kata/checkout-kata/bin/Debug/net6.0/checkout-kata.pdb
+/Users/benford/GIT/checkout-kata/checkout-kata/obj/Debug/net6.0/checkout-kata.csproj.AssemblyReference.cache
+/Users/benford/GIT/checkout-kata/checkout-kata/obj/Debug/net6.0/checkout-kata.GeneratedMSBuildEditorConfig.editorconfig
+/Users/benford/GIT/checkout-kata/checkout-kata/obj/Debug/net6.0/checkout-kata.AssemblyInfoInputs.cache
+/Users/benford/GIT/checkout-kata/checkout-kata/obj/Debug/net6.0/checkout-kata.AssemblyInfo.cs
+/Users/benford/GIT/checkout-kata/checkout-kata/obj/Debug/net6.0/checkout-kata.csproj.CoreCompileInputs.cache
+/Users/benford/GIT/checkout-kata/checkout-kata/obj/Debug/net6.0/checkout-kata.dll
+/Users/benford/GIT/checkout-kata/checkout-kata/obj/Debug/net6.0/refint/checkout-kata.dll
+/Users/benford/GIT/checkout-kata/checkout-kata/obj/Debug/net6.0/checkout-kata.pdb
+/Users/benford/GIT/checkout-kata/checkout-kata/obj/Debug/net6.0/ref/checkout-kata.dll

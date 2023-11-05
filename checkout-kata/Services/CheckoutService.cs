@@ -1,13 +1,15 @@
+using checkout_kata.Models;
+
 namespace checkout_kata.Services;
 
 public class CheckoutService : ICheckoutService
 {
     private readonly IDiscountService _discountService;
-
-
+    private readonly IList<IProduct> _basket = new List<IProduct>();
+    
     public CheckoutService(IDiscountService discountService)
     {
-        _discountService = discountService;
+        _discountService = discountService ?? throw new ArgumentNullException(nameof(discountService));
     }
 
     public int Total()
@@ -15,8 +17,13 @@ public class CheckoutService : ICheckoutService
         throw new NotImplementedException();
     }
 
-    public void Add(string product)
+    public void Add(IProduct product)
     {
-        throw new NotImplementedException();
+        if (product is null)
+            throw new ArgumentNullException(nameof(product));
+        
+        _basket.Add(product);
     }
+
+    public IEnumerable<IProduct> Basket => _basket;
 }
