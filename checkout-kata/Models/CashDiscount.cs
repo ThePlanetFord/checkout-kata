@@ -12,7 +12,11 @@ public class CashDiscount : IDiscount
             throw new ArgumentNullException(nameof(products));
 
         var originalAmountWithoutDeal = products.Sum(x => x.UnitPrice);
-        var amount = (decimal)products.Count() / Quantity;
-        return originalAmountWithoutDeal - (Math.Floor(amount) * Value);
+        var amount = Math.Floor((decimal)products.Count() / Quantity);
+        
+        if (amount == 0)
+            return 0;
+
+        return originalAmountWithoutDeal - (amount * Value);
     }
 }

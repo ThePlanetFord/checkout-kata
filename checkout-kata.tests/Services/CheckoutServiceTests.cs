@@ -105,10 +105,6 @@ public class CheckoutServiceTests
                 new() { Sku = 'A', UnitPrice = 10 },
                 new() { Sku = 'B', UnitPrice = 15 },
                 new() { Sku = 'B', UnitPrice = 15 }, 
-                new() { Sku = 'B', UnitPrice = 15 },
-                new() { Sku = 'B', UnitPrice = 15 },
-                new() { Sku = 'B', UnitPrice = 15 }, 
-                new() { Sku = 'B', UnitPrice = 15 },
                 new() { Sku = 'C', UnitPrice = 40}
             },
             new List<IDiscount>
@@ -120,7 +116,30 @@ public class CheckoutServiceTests
                     Value = 40
                 }
             },
-            130
+            80
+        };
+        
+        yield return new object[]
+        {
+            new List<Product>
+            {
+                new() { Sku = 'A', UnitPrice = 10 },
+                new() { Sku = 'B', UnitPrice = 15 },
+                new() { Sku = 'B', UnitPrice = 15 }, 
+                new() { Sku = 'B', UnitPrice = 15 }, 
+                new() { Sku = 'B', UnitPrice = 15 }, 
+                new() { Sku = 'C', UnitPrice = 40}
+            },
+            new List<IDiscount>
+            {
+                new CashDiscount()
+                {
+                    ItemSku = 'B',
+                    Quantity = 3,
+                    Value = 40
+                }
+            },
+            105
         };
     }
 }
