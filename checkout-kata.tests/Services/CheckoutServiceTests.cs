@@ -38,20 +38,24 @@ public class CheckoutServiceTests
     [Fact]
     public void GivenIAddAProductToTheCheckout_ThenThisShouldShowInsideTheBasket()
     {
-        var product = new Mock<IProduct>();
-        product.SetupGet(x => x.UnitPrice).Returns(10);
-        product.SetupGet(x => x.Sku).Returns('A');
-        CheckoutService.Add(product.Object);
-        CheckoutService.Basket.Should().BeEquivalentTo(new List<IProduct>() { product.Object });
+        var product = new Product()
+        {
+            UnitPrice = 10,
+            Sku = 'A'
+        };
+        CheckoutService.Add(product);
+        CheckoutService.Basket.Should().BeEquivalentTo(new List<IProduct> { product });
     }
 
     [Fact]
     public void GivenAProductIsAddedToCheckout_ThenTheTotalShouldBeCalculated()
     {
-        var product = new Mock<IProduct>();
-        product.SetupGet(x => x.UnitPrice).Returns(10);
-        product.SetupGet(x => x.Sku).Returns('A');
-        CheckoutService.Add(product.Object);
+        var product = new Product()
+        {
+            UnitPrice = 10,
+            Sku = 'A'
+        };
+        CheckoutService.Add(product);
         CheckoutService.Total().Should().Be(10);
     }
 }

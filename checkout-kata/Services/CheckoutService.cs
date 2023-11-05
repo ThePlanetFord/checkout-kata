@@ -15,10 +15,7 @@ public class CheckoutService : ICheckoutService
     public decimal Total()
     {
         decimal total = 0;
-        foreach (var item in _basket)
-        {
-            total = item.UnitPrice + total;
-        }
+        total = _basket.Sum(x => x.UnitPrice);
         return total;
     }
 
