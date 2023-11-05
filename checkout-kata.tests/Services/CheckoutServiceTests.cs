@@ -58,4 +58,60 @@ public class CheckoutServiceTests
         CheckoutService.Add(product);
         CheckoutService.Total().Should().Be(10);
     }
+
+    [Theory]
+    [MemberData(nameof(GetCheckoutData))]
+    public void GivenDiscountsExistInBasket_ThenApplyDiscountToTotal(IEnumerable<Product> products, IEnumerable<Discount> discounts, decimal expectedPrice)
+    {
+        DiscountService.Setup(x => x.GetDiscounts())
+            .Returns(discounts);
+        foreach (var product in products)
+        {
+            CheckoutService.Add(product);
+        }
+
+        CheckoutService.Basket.Should().BeEquivalentTo(products);
+        CheckoutService.Total().Should().Be(expectedPrice);
+    }
+
+
+    public static IEnumerable<object[]> GetCheckoutData()
+    {
+        yield return new object[]
+        {
+            new List<Product>
+            {
+                new()
+                {
+                    Sku = 'A',
+                    UnitPrice = 10
+                },
+                new()
+                {
+                    Sku = 'B',
+                    UnitPrice = 15
+                },
+                new()
+                {
+                    Sku = 'B',
+                    UnitPrice = 15
+                },
+                new()
+                {
+                    Sku = 'B',
+                    UnitPrice = 15
+                }
+            },
+            new List<Discount>
+            {
+                new()
+                {
+                    ItemSku = 'B',
+                    Quantity = 3,
+                    Value = 40
+                }
+            },
+            50
+        };
+    }
 }
