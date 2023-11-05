@@ -16,11 +16,6 @@ public class CashDiscount : IDiscount
         var amountOfDeals = Math.Floor((decimal)products.Count() / Quantity);
         var nonDealProducts = products.Count() % Quantity;
 
-        var remainderAmount = originalAmountWithoutDeal - ((amountOfDeals * Value) + (nonDealProducts * valueOfProductOriginally));
-        var nonRemainderAmount = originalAmountWithoutDeal - (amountOfDeals * Value);
-        
-        return nonDealProducts >= 1 ?
-            remainderAmount :
-            nonRemainderAmount;
+        return originalAmountWithoutDeal - ((amountOfDeals * Value) + (nonDealProducts * valueOfProductOriginally));
     }
 }
